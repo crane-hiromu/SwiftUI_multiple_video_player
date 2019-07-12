@@ -11,10 +11,13 @@ import AVFoundation
 import AVKit
 
 struct ContentView : View {
+    
+//    @State var video: Video = Video()
+    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                ForEach(0..<6) { _ in
+                ForEach(0..<6) { item in
                     Video()
                         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
                         .onAppear(perform: {
@@ -23,34 +26,38 @@ struct ContentView : View {
                         .onDisappear(perform: {
                             print("-----onDisappear")
                         })
+                    
                 }
             }
         }
-        
-        
+
+//        List(0..<6) { item in
+//            Video()
+//                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+//                .rotationEffect(.radians(.pi/2))
+//                .onAppear(perform: {
+//                    print("-----onAppear", item.id)
+//                })
+//                .onDisappear(perform: {
+//                    print("-----onDisappear", item.id)
+//                })
+//        }
+//        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+//        .rotationEffect(.radians(-.pi/2))
     }
 }
 
 struct Video: UIViewRepresentable {
     
+    let player = PlayerView(frame: .zero)
+    
     func makeUIView(context: Context) -> PlayerView {
-        PlayerView(frame: .zero)
+        player
     }
     
     func updateUIView(_ uiView: PlayerView, context: UIViewRepresentableContext<Video>) {
         
     }
-    
-//    func url(_ urlString: String) -> Video {
-//        guard let url = URL(string: urlString) else { return self }
-//        
-//        let player = AVPlayer(url: url)
-//        player.play()
-//        
-//        playerLayer.player = player
-//        layer.addSublayer(playerLayer)
-//        return self
-//    }
 }
 
 class PlayerView: UIView {
@@ -62,7 +69,7 @@ class PlayerView: UIView {
         
         let url = URL(string: "https://media.delishkitchen.tv/recipe/142662346819502579/1.mp4")!
         let player = AVPlayer(url: url)
-        player.play()
+//        player.play()
         
         playerLayer.player = player
         layer.addSublayer(playerLayer)
@@ -75,6 +82,10 @@ class PlayerView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         playerLayer.frame = bounds
+    }
+    
+    func play() {
+        playerLayer.player?.play()
     }
 }
 
