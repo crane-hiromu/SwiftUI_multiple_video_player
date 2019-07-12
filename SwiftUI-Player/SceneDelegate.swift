@@ -1,9 +1,9 @@
 //
 //  SceneDelegate.swift
-//  SwiftUI-Demo-APP
+//  SwiftUI-Player
 //
-//  Created by admin on 2019/06/05.
-//  Copyright © 2019 admin. All rights reserved.
+//  Created by admin on 2019/07/07.
+//  Copyright © 2019 h.crane. All rights reserved.
 //
 
 import UIKit
