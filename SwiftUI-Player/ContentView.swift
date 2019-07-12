@@ -12,7 +12,7 @@ import AVKit
 
 struct ContentView : View {
     var body: some View {
-        ScrollView(showsHorizontalIndicator: false) {
+        ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 ForEach(0..<6) { _ in
                     Video()
@@ -26,9 +26,6 @@ struct ContentView : View {
                 }
             }
         }
-        .onHover(perform: { bool in
-            print("-----onHover")
-        })
         
         
     }
