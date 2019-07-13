@@ -9,27 +9,66 @@
 import SwiftUI
 import AVFoundation
 import AVKit
+import Combine
 
 struct ContentView : View {
     
-//    @State var video: Video = Video()
+    @State var currentOffset: CGFloat = .zero
     
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack {
-                ForEach(0..<6) { item in
-                    Video()
-                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
-                        .onAppear(perform: {
-                            print("-----onAppear")
-                        })
-                        .onDisappear(perform: {
-                            print("-----onDisappear")
-                        })
-                    
+        GeometryReader { parentGeometry in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    GeometryReader { childGeometry -> Text in
+                        let offset = childGeometry.frame(in: .global).minX
+                        if self.currentOffset != offset {
+                            self.currentOffset = offset
+                        }
+                        print("------", offset, parentGeometry.size, childGeometry.size)
+                        return Text("")
+                    }
+                    ForEach(0..<6) { item in
+                        HStack {
+                            Text("Box")
+                                .frame(width: 300, height: 300)
+                                .foregroundColor(.red)
+                            Divider()
+                        }
+                    }
                 }
+                .frame(height: parentGeometry.size.height)
             }
         }
+        
+//        Video()
+//            .frame(width: UIScreen.main.bounds.width,
+//                   height: UIScreen.main.bounds.width)
+        
+        
+//        .frame(width: UIScreen.main.bounds.width,
+//                height: UIScreen.main.bounds.width)
+        
+//        ScrollView(.horizontal, showsIndicators: false) {
+//            HStack {
+//                ForEach(0..<6) { item in
+//                    Video()
+//                        .frame(width: UIScreen.main.bounds.width,
+//                               height: UIScreen.main.bounds.width)
+//                        .gesture(
+//                            DragGesture()
+//                                .onChanged { value in
+//                                    self.currentOffset = value.translation
+//                                    print("------onChanged", value.translation, item.id)
+//                                }
+//                                .onEnded { value in
+//                                    //                                    self.currentOffset = .zero
+//                                    print("------onEnded", value.translation, item.id)
+//                                }
+//                            )
+//                }
+//            }
+//        }
+
 
 //        List(0..<6) { item in
 //            Video()
