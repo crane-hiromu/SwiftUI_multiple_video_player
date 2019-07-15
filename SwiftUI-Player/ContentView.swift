@@ -11,78 +11,137 @@ import AVFoundation
 import AVKit
 import Combine
 
-struct ContentView : View {
+struct ContentView: View {
     
     @State var currentOffset: CGFloat = .zero
+    @State var changeOffset: CGFloat = .zero
+    @State var currentRow: Int = 0
+    @State var isSelected: Bool = false
+    
+    private var data = [0, 1, 2, 3, 4, 5]
+    @State private var rows: [Int] = []
     
     var body: some View {
-        GeometryReader { parentGeometry in
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    GeometryReader { childGeometry -> Text in
-                        let offset = childGeometry.frame(in: .global).minX
-                        if self.currentOffset != offset {
-                            self.currentOffset = offset
-                        }
-                        print("------", offset, parentGeometry.size, childGeometry.size)
-                        return Text("")
-                    }
-                    ForEach(0..<6) { item in
-                        HStack {
-                            Text("Box")
-                                .frame(width: 300, height: 300)
-                                .foregroundColor(.red)
-                            Divider()
-                        }
-                    }
-                }
-                .frame(height: parentGeometry.size.height)
-            }
-        }
-        
-//        Video()
-//            .frame(width: UIScreen.main.bounds.width,
-//                   height: UIScreen.main.bounds.width)
+//        GeometryReader { parentGeometry in
+//            VStack {
+//                ScrollView(.horizontal, showsIndicators: false) {
+//                    HStack {
+//                        GeometryReader { childGeometry -> Text in
+//                            let offset = childGeometry.frame(in: .local)
+//                            let offsetG = childGeometry.frame(in: .global)
+//                            if self.currentOffset != offset.minY {
+//                                self.currentOffset = offset.minY
+//                            }
+//                            print("------", offset, offsetG)
+//                            return Text("")
+//                        }
+//                        ForEach(0..<6) { index in
+//                            Video()
+//                                .frame(width: UIScreen.main.bounds.width,
+//                                       height: UIScreen.main.bounds.width)
+//                        }
+//                    }
+//                    //                .fixedSize(horizontal: false, vertical: true)
+//                    //                .frame(height: parentGeometry.size.height)
+//                }
+//
+//
+//                Button(action: {
+//                    self.changeOffset = !self.isSelected ? 0 : 200
+//                    self.isSelected.toggle()
+//
+////                        .animation(.spring())
+////                        .position(x: self.changeOffset)
+//                }, label: {
+//                    Text("set")
+//                }).animation(.basic())
+//            }
+//        }
         
         
 //        .frame(width: UIScreen.main.bounds.width,
 //                height: UIScreen.main.bounds.width)
+
         
-//        ScrollView(.horizontal, showsIndicators: false) {
-//            HStack {
-//                ForEach(0..<6) { item in
+        
+        
+//        GeometryReader { parentGeometry in
+//            List(self.data) { item in
+//                VStack {
+//                    GeometryReader { childGeometry -> Text in
+//                        let offset = childGeometry.frame(in: .global)
+//
+//                        if item.id == 0, item.id != self.currentRow {
+//                            self.currentRow = item.id
+//                            self.currentOffset = offset.minX
+//                            print("------", item.id, offset)
+//                        }
+//
+//                        return Text("")
+//                    }
 //                    Video()
-//                        .frame(width: UIScreen.main.bounds.width,
-//                               height: UIScreen.main.bounds.width)
-//                        .gesture(
-//                            DragGesture()
-//                                .onChanged { value in
-//                                    self.currentOffset = value.translation
-//                                    print("------onChanged", value.translation, item.id)
-//                                }
-//                                .onEnded { value in
-//                                    //                                    self.currentOffset = .zero
-//                                    print("------onEnded", value.translation, item.id)
-//                                }
-//                            )
+////                        .rotationEffect(.radians(.pi/2))
+//                        .frame(width: UIScreen.main.bounds.width-50,
+//                               height: UIScreen.main.bounds.width-50)
+//                        .onAppear(perform: {
+//                            print("-----onAppear", item.id)
+////                            self.rows.append(item.id)
+//                            self.currentRow = item.id
+//                        })
+//                        .onDisappear(perform: {
+//                            print("-----onDisappear", item.id)
+////                            self.rows = self.rows.filter { $0 != item.id }
+//                        })
+//                        .animation(.spring())
+//                        .offset(y: self.currentOffset)
 //                }
+////                .fixedSize(horizontal: true, vertical: true)
 //            }
+////            .rotationEffect(.radians(-.pi/2))
 //        }
-
-
-//        List(0..<6) { item in
-//            Video()
-//                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
-//                .rotationEffect(.radians(.pi/2))
-//                .onAppear(perform: {
-//                    print("-----onAppear", item.id)
-//                })
-//                .onDisappear(perform: {
-//                    print("-----onDisappear", item.id)
-//                })
-//        }
-//        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
-//        .rotationEffect(.radians(-.pi/2))
+//        .frame(width: UIScreen.main.bounds.width,
+//               height: UIScreen.main.bounds.width)
+        
+        
+        GeometryReader { parentGeometry in
+            HStack {
+//                GeometryReader { childGeometry -> Text in
+//                    let offset = childGeometry.frame(in: .local)
+//                    let offsetG = childGeometry.frame(in: .global)
+//                    //                        if self.currentOffset != offset.minY {
+//                    //                            self.currentOffset = offset.minY
+//                    //                        }
+//                    print("------", offset, offsetG)
+//                    return Text("")
+//                }
+                ForEach(0..<6) { index in
+                    Video()
+                        .frame(width: UIScreen.main.bounds.width,
+                               height: UIScreen.main.bounds.width)
+                }
+            }
+            .gesture(
+                DragGesture()
+                    .onChanged { value in
+                        print("----onChanged", value.translation)
+                  
+                        
+                    }
+                    .onEnded { value in
+                        print("----onEnded")
+                        
+                        
+                        if 0 < value.translation.width {
+                            self.currentOffset += UIScreen.main.bounds.width
+                        } else  {
+                            self.currentOffset -= UIScreen.main.bounds.width
+                        }
+                    }
+            )
+            .animation(.spring())
+            .offset(x: self.currentOffset)
+            
+        }
     }
 }
 
