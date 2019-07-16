@@ -14,9 +14,7 @@ import Combine
 struct ContentView: View {
     
     @State var currentOffset: CGFloat = .zero
-    @State var changeOffset: CGFloat = .zero
-    @State var currentRow: Int = 0
-    @State var isSelected: Bool = false
+    @State var currentOpacity: Double = 1.0
     
     private var data = [0, 1, 2, 3, 4, 5]
     @State private var rows: [Int] = []
@@ -103,7 +101,7 @@ struct ContentView: View {
 //               height: UIScreen.main.bounds.width)
         
         
-        GeometryReader { parentGeometry in
+//        GeometryReader { parentGeometry in
             HStack {
 //                GeometryReader { childGeometry -> Text in
 //                    let offset = childGeometry.frame(in: .local)
@@ -123,25 +121,36 @@ struct ContentView: View {
             .gesture(
                 DragGesture()
                     .onChanged { value in
-                        print("----onChanged", value.translation)
-                  
+//                        print("----onChanged",
+//                              value.translation.width,
+//                              value.translation.height,
+//                              value.location,
+//                              value.startLocation,
+//                              value.predictedEndLocation,
+//                              value.predictedEndTranslation)
+//
+//
                         
+//                        self.currentOpacity = 0
                     }
                     .onEnded { value in
                         print("----onEnded")
                         
                         
+                        
                         if 0 < value.translation.width {
                             self.currentOffset += UIScreen.main.bounds.width
-                        } else  {
+                        } else {
                             self.currentOffset -= UIScreen.main.bounds.width
                         }
+                        
+//                        self.currentOpacity = 1
                     }
             )
-            .animation(.spring())
+//            .animation(.none)
             .offset(x: self.currentOffset)
-            
-        }
+//            .opacity(self.currentOpacity)
+//        }
     }
 }
 
