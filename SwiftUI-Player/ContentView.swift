@@ -16,8 +16,15 @@ struct ContentView: View {
     @State var currentOffset: CGFloat = .zero
     @State var currentOpacity: Double = 1.0
     
-    private var data = [0, 1, 2, 3, 4, 5]
-    @State private var rows: [Int] = []
+//    @State private var presious = 0 {
+//        didSet {
+//            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+//                self.data.append(self.presious)
+//            }
+//
+//        }
+//    }
+    @State private var data = [0, 1, 2, 3, 4, 5]
     
     var body: some View {
 //        GeometryReader { parentGeometry in
@@ -62,95 +69,61 @@ struct ContentView: View {
 
         
         
+ 
         
-//        GeometryReader { parentGeometry in
-//            List(self.data) { item in
-//                VStack {
-//                    GeometryReader { childGeometry -> Text in
-//                        let offset = childGeometry.frame(in: .global)
-//
-//                        if item.id == 0, item.id != self.currentRow {
-//                            self.currentRow = item.id
-//                            self.currentOffset = offset.minX
-//                            print("------", item.id, offset)
-//                        }
-//
-//                        return Text("")
-//                    }
-//                    Video()
-////                        .rotationEffect(.radians(.pi/2))
-//                        .frame(width: UIScreen.main.bounds.width-50,
-//                               height: UIScreen.main.bounds.width-50)
-//                        .onAppear(perform: {
-//                            print("-----onAppear", item.id)
-////                            self.rows.append(item.id)
-//                            self.currentRow = item.id
-//                        })
-//                        .onDisappear(perform: {
-//                            print("-----onDisappear", item.id)
-////                            self.rows = self.rows.filter { $0 != item.id }
-//                        })
-//                        .animation(.spring())
-//                        .offset(y: self.currentOffset)
-//                }
-////                .fixedSize(horizontal: true, vertical: true)
-//            }
-////            .rotationEffect(.radians(-.pi/2))
-//        }
-//        .frame(width: UIScreen.main.bounds.width,
-//               height: UIScreen.main.bounds.width)
-        
-        
-//        GeometryReader { parentGeometry in
-            HStack {
-//                GeometryReader { childGeometry -> Text in
-//                    let offset = childGeometry.frame(in: .local)
-//                    let offsetG = childGeometry.frame(in: .global)
-//                    //                        if self.currentOffset != offset.minY {
-//                    //                            self.currentOffset = offset.minY
-//                    //                        }
-//                    print("------", offset, offsetG)
-//                    return Text("")
-//                }
-                ForEach(0..<6) { index in
-                    Video()
-                        .frame(width: UIScreen.main.bounds.width,
-                               height: UIScreen.main.bounds.width)
-                }
+        ZStack {
+            ForEach(data) { index in
+                Video()
+                    .frame(width: self.getLine(index), height: self.getLine(index))
+                    .background(Color.gray)
+                    .animation(.linear)
+                    .offset(x: ((index == self.data.first) ? self.currentOffset : 0),
+                            y: Length(index*(-10)))
+                    .opacity(self.getOpacity(index))
+                    .zIndex(self.getZIndex(index))
+                    .gesture(
+                        DragGesture()
+                            .onChanged { value in
+                                print("----onChanged")
+                                print("----", value.translation.width)
+                                self.currentOffset = value.translation.width
+                                 
+                            }
+                            .onEnded { value in
+                                print("----onEnded")
+    //                            self.currentOffset = 0
+                                let presious = self.data.remove(at: 0)
+                                self.data.append(presious+1)
+                                //                        if 0 < value.translation.width {
+                                //                            self.currentOffset += UIScreen.main.bounds.width
+                                //                        } else {
+                                //                            self.currentOffset -= UIScreen.main.bounds.width
+                                //                        }
+                                
+                            }
+                )
             }
-            .gesture(
-                DragGesture()
-                    .onChanged { value in
-//                        print("----onChanged",
-//                              value.translation.width,
-//                              value.translation.height,
-//                              value.location,
-//                              value.startLocation,
-//                              value.predictedEndLocation,
-//                              value.predictedEndTranslation)
+//            .onMove(perform: { index in
 //
+//            })
+        }
+
+            //            .animation(.none)
+            //            .animation(.spring())
 //
-                        
-//                        self.currentOpacity = 0
-                    }
-                    .onEnded { value in
-                        print("----onEnded")
-                        
-                        
-                        
-                        if 0 < value.translation.width {
-                            self.currentOffset += UIScreen.main.bounds.width
-                        } else {
-                            self.currentOffset -= UIScreen.main.bounds.width
-                        }
-                        
-//                        self.currentOpacity = 1
-                    }
-            )
-//            .animation(.none)
-            .offset(x: self.currentOffset)
-//            .opacity(self.currentOpacity)
-//        }
+        //            .opacity(self.currentOpacity)
+    }
+    
+    func getLine(_ index: Int) -> CGFloat {
+        return UIScreen.main.bounds.width-CGFloat(index*10)
+    }
+    
+    func getOpacity(_ index: Int) -> Double {
+        return Double(1)-Double(index)/10
+    }
+    
+    func getZIndex(_ index: Int) -> Double {
+        return Double(index) * (-1)
     }
 }
 
