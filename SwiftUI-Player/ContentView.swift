@@ -152,7 +152,7 @@ class PlayerView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-//        let url = URL(string: "https://media.delishkitchen.tv/recipe/142662346819502579/1.mp4")!
+//        let url = URL(string: "https://xxxx.mp4")!
 //        let player = AVPlayer(url: url)
 ////        player.play()
 //
